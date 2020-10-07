@@ -1,15 +1,25 @@
 const { Telegraf } = require('telegraf')
 const fs = require('fs');
-const axios = require("axios");
-
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 require('dotenv').config({ path: __dirname + '/.env' })
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 const getRandomWord = async () => {
 
-  const { data } = await axios.get(`http://free-generator.ru/generator.php?action=word&type=2`)
-  if (data) {
-    return data.word.word.slice(0, -1) + 'x'
+  const xhr = new XMLHttpRequest();
+
+
+  xhr.open('GET', 'http://free-generator.ru/generator.php?action=word&type=2', false);
+  xhr.setRequestHeader("Content-Type: application/json");
+
+
+  xhr.send();
+  xhr.responseType = 'json';
+
+  if (xhr.status !== 200) {
+    console.log( xhr.status + ': ' + xhr.statusText );
+  } else if(xhr.responseText) {
+    return (JSON.parse(xhr.responseText).word.word.slice(0, -1) + 'x')
   }
   return 'xороших'
 }

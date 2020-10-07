@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/RiinaVi/goodNightBot#readme",
   "devDependencies": {
-    "axios": "^0.20.0",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "xmlhttprequest": "^1.8.0"
   },
   "dependencies": {
     "telegraf": "^3.38.0"
