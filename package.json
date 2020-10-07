@@ -1,0 +1,28 @@
+{
+  "name": "goodNightBot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RiinaVi/goodNightBot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RiinaVi/goodNightBot/issues"
+  },
+  "homepage": "https://github.com/RiinaVi/goodNightBot#readme",
+  "devDependencies": {
+    "axios": "^0.20.0",
+    "dotenv": "^8.2.0"
+  },
+  "dependencies": {
+    "telegraf": "^3.38.0"
+  }
+}
