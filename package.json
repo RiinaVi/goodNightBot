@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "telegraf": "^3.38.0",
-    "xmlhttprequest": "^1.8.0"
+    "xmlhttprequest": "^1.8.0",
+    "dotenv": "^8.2.0"
   }
 }
