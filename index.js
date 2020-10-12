@@ -1,44 +1,62 @@
-const { Telegraf } = require('telegraf')
-const fs = require('fs');
-const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-require('dotenv').config({ path: __dirname + '/.env' })
-const bot = new Telegraf(process.env.BOT_TOKEN);
+const express = require('express');
+const axios = require('axios');
+const bodyParser = require('body-parser');
+require('dotenv').config({ path: __dirname + '/.env' });
+
+const app = express();
 
 const getRandomWord = async () => {
-
-  const xhr = new XMLHttpRequest();
-
-
-  xhr.open('GET', 'http://free-generator.ru/generator.php?action=word&type=2', false);
-  xhr.setRequestHeader("Content-Type: application/json");
-
-
-  xhr.send();
-  xhr.responseType = 'json';
-
-  if (xhr.status !== 200) {
-    console.log( xhr.status + ': ' + xhr.statusText );
-  } else if(xhr.responseText) {
-    return (JSON.parse(xhr.responseText).word.word.slice(0, -1) + 'x')
+  const { data } = await axios.get(`http://free-generator.ru/generator.php?action=word&type=2`)
+  if (data) {
+    return data.word.word.slice(0, -1) + 'x'
   }
   return 'xороших'
 }
 
-bot.start(ctx => ctx.reply('Привет! Я пожелаю тебе спокойной ночи по команде /night'))
-bot.help(ctx => ctx.reply('Попробуй команду /night'))
-bot.on('photo', ctx => ctx.replyWithPhoto({ source: fs.readFileSync('./cat.jpg') }))
-bot.on(['sticker', 'video'], ctx => ctx.reply('Супер 👍'))
-bot.hears('Привет', ctx => ctx.reply('Приветики'))
-bot.on('dice', ctx => ctx.replyWithDice())
-bot.command('night', async (ctx) => {
-  const word = await getRandomWord();
-  console.log(ctx.message.from.first_name, ctx.message.from.last_name, word);
-  await ctx.reply(`Спокойной ночи, солнце ❤️, ${word} снов`);
+const sendMessage = async (message) => {
+  let text;
+  if (message.sticker || message.video) {
+    text = 'Супер 👍'
+  } else if (message.dice) {
+    const { data } = await axios.get(`${process.env.BASE_URL}${process.env.BOT_TOKEN}/sendDice?chat_id=${message.chat.id}&emoji=${encodeURIComponent('🎲')}`);
+    text = 'dice';
+    if (data.ok) return data.result
+  }
+    else if (message.photo) {
+      const { data } = await axios.get(`${process.env.BASE_URL}${process.env.BOT_TOKEN}/sendPhoto?chat_id=${message.chat.id}&photo=${encodeURIComponent('https://static10.tgstat.ru/channels/_0/6d/6d23ef75722cd7dd31adab2b6e43f60b.jpg')}`);
+      text = 'photo';
+      if (data.ok) return data.result
+    }
+    else {
+    text = await getReply(message.text)
+  }
+  console.log(text);
+  const { data } = await axios.get(`${process.env.BASE_URL}${process.env.BOT_TOKEN}/sendMessage?chat_id=${message.chat.id}&text=${encodeURIComponent(text)}`);
+  if (data.ok) return data.result
+}
+
+const getReply = async (message) => {
+  switch (message) {
+    case '/start':
+      return 'Привет! Я пожелаю тебе спокойной ночи по команде /night';
+    case '/help':
+      return 'Попробуй команду /night';
+    case '/settime':
+      return 'Эта фича в разработке...';
+    case '/night': {
+      const word = await getRandomWord();
+      return `Спокойной ночи, солнце ❤️, ${word} снов`;
+    }
+    default:
+      return 'Я мог бы с тобой поговорить, но не хочу';
+  }
+}
+
+app.use(bodyParser.json());
+app.post('/bot', async (req, res) => {
+  console.log(req.body.message.from.first_name, req.body.message.from.last_name, req.body.message.text);
+  await sendMessage(req.body.message)
+  res.send()
 })
-bot.command('settime', ctx =>
-    ctx.reply('Отправь мне время в формате чч:мм, в которое ты хочешь получить пожелание спокойной ночи'))
-bot.on('message', ctx => {
-  console.log(ctx.message);
-  ctx.reply('Я мог бы с тобой поговорить, но не хочу')
-})
-bot.launch()
+
+app.listen(process.env.PORT, () => console.log(`My server is running on port ${process.env.PORT}`))
