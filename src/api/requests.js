@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { instance } = require("./instance");
-const { getDeclension } = require("../utils");
+const { getDeclension } = require("../utils/declension");
 
 const getRandomWord = async () => {
   const { data } = await axios.get(`http://free-generator.ru/generator.php?action=word&type=2`)

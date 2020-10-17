@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 require('dotenv').config({ path: __dirname + '/.env' });
 
-const { reply } = require("./src/utils");
+const { reply } = require("./src/utils/replies");
 
 const app = express();
 
