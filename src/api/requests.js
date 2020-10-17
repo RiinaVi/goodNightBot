@@ -4,7 +4,7 @@ const { getDeclension } = require("../utils/declension");
 
 const getRandomWord = async () => {
   const { data } = await axios.get(`http://free-generator.ru/generator.php?action=word&type=2`)
-  console.log(data);
+  console.log('line 7', data);
   if (data) {
     return getDeclension(data.word.word);
   }
@@ -12,8 +12,9 @@ const getRandomWord = async () => {
 }
 
 const sendTextMessage = async (chatId, text) => {
+  console.log('line 15', chatId, text);
   const { data } = await instance.get(`/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`);
-  console.log(data);
+  console.log('line 17', data);
   if (data.ok) return data.result;
 }
 

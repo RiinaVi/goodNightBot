@@ -27,11 +27,11 @@ const reply = async (message) => {
     res = await sendPhoto(message.chat.id);
   } else {
     text = await getReply(message.text);
-    console.log(text);
+    console.log('line 30', text);
     res = await sendTextMessage(message.chat.id, text);
-    console.log(res);
+    console.log('line 32', res);
   }
-  console.log(text, res);
+  console.log('line 34', text, res);
   return res;
 }
 
