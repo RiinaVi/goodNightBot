@@ -4,6 +4,7 @@ const { getDeclension } = require("../utils/declension");
 
 const getRandomWord = async () => {
   const { data } = await axios.get(`http://free-generator.ru/generator.php?action=word&type=2`)
+  console.log(data);
   if (data) {
     return getDeclension(data.word.word);
   }

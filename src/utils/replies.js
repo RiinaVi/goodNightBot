@@ -29,7 +29,7 @@ const reply = async (message) => {
     text = await getReply(message.text)
     res = await sendTextMessage(message.chat.id, text);
   }
-  console.log(text);
+  console.log(text, res);
   return res;
 }
 
