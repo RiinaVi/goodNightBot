@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.json());
 
 app.post('/bot', async (req, res) => {
-  const { message } = req.body.message;
+  const { message } = req.body;
   console.log(message.from.first_name, message.from.last_name, message.text);
   await reply(message);
   res.send();
