@@ -26,8 +26,10 @@ const reply = async (message) => {
   } else if (message.photo) {
     res = await sendPhoto(message.chat.id);
   } else {
-    text = await getReply(message.text)
+    text = await getReply(message.text);
+    console.log(text);
     res = await sendTextMessage(message.chat.id, text);
+    console.log(res);
   }
   console.log(text, res);
   return res;
