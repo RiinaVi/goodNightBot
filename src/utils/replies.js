@@ -22,15 +22,13 @@ const reply = async (message) => {
   if (message.sticker || message.video) {
     text = 'Супер 👍'
   } else if (message.dice) {
-    res = await sendDice(message.chat.id);
+    await sendDice(message.chat.id);
   } else if (message.photo) {
-    res = await sendPhoto(message.chat.id);
+    await sendPhoto(message.chat.id);
   } else {
     text = await getReply(message.text);
-    await sendTextMessage(message.chat.id, text)
-        .then(res => {console.log('line 32', res.data)})
-        .catch(e => console.log('line 33', e));
   }
+  res = await sendTextMessage(message.chat.id, text);
   return res;
 }
 
