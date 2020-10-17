@@ -18,18 +18,19 @@ const getReply = async (message) => {
 }
 
 const reply = async (message) => {
-  let text, res;
+  let text;
   if (message.sticker || message.video) {
     text = 'Супер 👍'
   } else if (message.dice) {
     await sendDice(message.chat.id);
+    return;
   } else if (message.photo) {
     await sendPhoto(message.chat.id);
+    return;
   } else {
     text = await getReply(message.text);
   }
-  res = await sendTextMessage(message.chat.id, text);
-  return res;
+  await sendTextMessage(message.chat.id, text);
 }
 
 module.exports = { reply };
