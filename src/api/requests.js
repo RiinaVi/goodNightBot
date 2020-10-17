@@ -12,10 +12,7 @@ const getRandomWord = async () => {
 }
 
 const sendTextMessage = async (chatId, text) => {
-  console.log('line 15', chatId, text);
-  const { data } = await instance.get(`/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`);
-  console.log('line 17', data);
-  if (data.ok) return data.result;
+  await instance.get(`/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
 }
 
 const sendPhoto = async (chatId) => {

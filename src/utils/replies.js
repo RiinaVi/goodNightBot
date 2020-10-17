@@ -28,8 +28,9 @@ const reply = async (message) => {
   } else {
     text = await getReply(message.text);
     console.log('line 30', text);
-    res = await sendTextMessage(message.chat.id, text);
-    console.log('line 32', res);
+    await sendTextMessage(message.chat.id, text)
+        .then(res => {console.log('line 32', res)})
+        .catch(e => console.log('line 33', e));
   }
   console.log('line 34', text, res);
   return res;
